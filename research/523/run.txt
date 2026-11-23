@@ -1,0 +1,8 @@
+No circuit of size at most 10.
+Successful topological orders (commutative inputs): 2409150
+Flat formulas: 300
+Flat circuits sharing an internal gate: 0
+Nested formulas: 186
+Nested circuits sharing an internal gate: 32
+Maximum number of shared internal gates: 1
+Unflattenable circuit found: no
