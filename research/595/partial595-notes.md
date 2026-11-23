@@ -1,0 +1,15 @@
+# A binary-gate lower bound for the seven-vertex theta graph
+
+The search uses AND gates with free inverters on every wire and on the output. An OR is an AND with both operands and its result complemented. Thus an impossibility result in this model also bounds the total number of gates in circuits over AND, OR and NOT.
+
+A state contains a budget, a list of live Boolean coordinates, and a partial truth table from patterns on those coordinates to target values. The initial table records all 128 assignments of the seven source variables, labelled by the edge predicate. The status of every state depends only on this table, its number of coordinates, and its budget.
+
+To generate successors, pick two distinct live coordinates. The new AND, with its complemented operands specified, is true on one of the four patterns of the two coordinates. For each choice, independently retire either, both, or neither of those two source coordinates. Retained coordinates keep their previous order, with the new gate appended at the end. Relabel the truth table by these coordinates, discarding a transition if two rows now have identical coordinate patterns and opposite target labels. Duplicate rows with matching labels collapse into a single row. Accept when a coordinate, with either polarity, matches the target in every row.
+
+For completeness, take a minimum circuit, discard dead gates, and follow a topological order. Retire each signal exactly at its last read. All source variables occur since the target depends on each of them. A gate that gives a constant on the possible inputs can be simplified away along with every use of that constant. A gate that reproduces a live wire in either polarity can be replaced by that wire. These observations justify omitting constant and duplicate columns. After each gate, the remaining live signals must determine the target and each live signal must still reach the output. With n live signals, a connected circuit with fan-in at most two requires at least n−1 further gates, justifying the remaining-budget test. Under this scheduling convention the induction includes every minimum circuit.
+
+All rows and memoized states are compared exactly, with hash collisions resolved by equality. A search at binary budget 10 never has more than nine live coordinates: the initial spare above the connectedness bound is four, and retaining both inputs when adding a new gate uses two spare units. A 512-cell array therefore fits every pattern. The complement operation is represented by operand polarities, so it requires no separate recursion step.
+
+An 11-gate upper bound is the OR of four stars, with centers and leaf sets 0:{1,2,3}, 1:{2,6}, 4:{3,5}, and 5:{6}. The stars use eight gates altogether, and three further gates combine them.
+
+Across budgets 6 through 10 the search found no realization. It recorded 185,291 distinct losing states and traversed 366,280 compatible transitions. The exact AND-inverter gate complexity and the ordinary AND/OR/NOT gate complexity are therefore both 11. This is a finite computational proof in C++, without a Lean formalization of the lower bound.
